@@ -3,6 +3,16 @@ window.onload = function () {
   new Calendar();
 };
 
+var WEEK = {
+  1 : 'Su',
+  2 : 'Mo',
+  3 : 'Tu',
+  4 : 'We',
+  5 : 'Th',
+  6 : 'Fr',
+  7 : 'Sa'
+};
+
 var MONTH = {
   0 : 'January',
   1 : 'February',
@@ -87,20 +97,25 @@ function Calendar() {
         var calBodyDay = document.createElement('td');
         if(cellCounter < (firstDayOfMonth+1)) {
           calBodyDay.classList.add('cal-body-day',
-                                   'day-from-other-month',
-                                   'day-'+cellCounter);
+                                   'day-from-other-month');
           calBodyDay.textContent = ++prevMonthDates;
         }else if (cellCounter > (firstDayOfMonth+daysInMonth)){
           calBodyDay.classList.add('cal-body-day',
-                                   'day-from-other-month',
-                                   'day-'+cellCounter);
+                                   'day-from-other-month');
           calBodyDay.textContent = nextMonthDates++;
         }else {
           calBodyDay.classList.add('cal-body-day',
                                    'day-from-this-month',
                                    'day-'+today.getFullYear()+'-'+today.getMonth()+'-'+dayCounter);
           calBodyDay.textContent = dayCounter;
+          calBodyDay.addEventListener('click', function () {
+            console.log('click! ');
+          });
           ++dayCounter;
+        }
+        if (cellCounter <= 7) {
+          var currentValue = calBodyDay.textContent;
+          calBodyDay.textContent = WEEK[cellCounter] + ', ' + currentValue;
         }
         calBodyWeek.appendChild(calBodyDay);
         ++cellCounter;
