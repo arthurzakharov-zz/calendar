@@ -1,5 +1,6 @@
 #cal {
-    width: 90%;
+    width: 95%;
+    height: 85vh;
     margin: 0 auto;
     border-collapse: collapse;
 }
@@ -7,32 +8,32 @@
     position: relative;
 }
 #cal-nav {
-    width: 90%;
+    width: 95%;
     margin: 0 auto;
-    height: 50px;
-    line-height: 50px;
+    height: 5vh;
+    line-height: 5vh;
 }
 .cal-nav-btn {
     border: 1px solid lightgray;
     background-color: transparent;
-    padding: 5px;
+    padding: 3px;
     border-radius: 5px;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 10px;
+    font-weight: 400;
 }
 .cal-nav-btn:hover {
-    border-color: deepskyblue;
-    color: deepskyblue;
+    border-color: dimgray;
+    color: dimgray;
 }
 #cal-nav-today {
     margin-left: 20px;
+    padding: 3px 10px;
 }
 #cal-nav-month {
-    display: inline-block;
-    width: 200px;
-    font-size: 20px;
-    font-weight: 700;
-    padding: 0 15px;
+    display: inline;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0px 20px;
     text-align: center;
 }
 .day-from-other-month {
@@ -42,37 +43,37 @@
     position: relative;
 }
 .day-from-this-month:hover {
-    background-color: lightskyblue;
+    background-color: aliceblue;
 }
 #today {
     border: 3px solid deepskyblue;
     vertical-align: top;
-    color: blue;
-    font-size: 24px;
-    padding-top: 10px;
-    padding-left: 10px;
-    background-color: lightblue;
+    color: lightslategray;
+    font-size: 18px;
+    padding-top: 5px;
+    padding-left: 5px;
+    background-color: aliceblue;
 }
 .cal-body-day {
     width: 40px;
-    height: 80px;
-    border: 2px solid lightgray;
+    border: 1px solid lightgray;
     padding-top: 5px;
     padding-left: 5px;
     vertical-align: top;
     text-align: left;
     color: lightslategray;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 500;
 }
 .calendar-header {
+    height: 10vh;
     background-color: lightgrey;
-    padding-bottom: 20px;
-    padding-top: 80px;
+    opacity: .6;
 }
 .header-container {
-    width: 90%;
+    width: 95%;
     margin: 0 auto;
+    padding-top: 5vh;
 }
 .clearfix:after {
     display: block;
@@ -83,9 +84,9 @@
 #btnRefresh {
     float: left;
     width: 80px;
-    margin-right: 30px;
+    margin-right: 15px;
     padding: 5px;
-    background-color: deepskyblue;
+    background-color: skyblue;
     color: white;
     border: 1px solid transparent;
     border-radius: 10px;
@@ -105,10 +106,14 @@
 }
 #searchField {
     width: 200px;
+    padding: 0 5px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    box-shadow: 2px 2px 10px grey;
 }
 .week-day {
-    color: deepskyblue;
-    font-size: 22px;
+    color: lightgray;
+    font-size: 16px;
 }
 .day-selected {
     background-color: deepskyblue;

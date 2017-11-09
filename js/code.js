@@ -4,13 +4,13 @@ window.onload = function () {
 };
 
 var WEEK = {
-  1 : 'Su',
-  2 : 'Mo',
-  3 : 'Tu',
-  4 : 'We',
-  5 : 'Th',
-  6 : 'Fr',
-  7 : 'Sa'
+  1 : 'Sunday',
+  2 : 'Monday',
+  3 : 'Tuesday',
+  4 : 'Wednesday',
+  5 : 'Thursday',
+  6 : 'Friday',
+  7 : 'Saturday'
 };
 
 var MONTH = {
