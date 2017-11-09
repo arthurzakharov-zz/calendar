@@ -95,27 +95,32 @@ function Calendar() {
       bodyElem.appendChild(calBodyWeek);
       for(var j = 0; j < 7; j++){
         var calBodyDay = document.createElement('td');
+        var numBox = document.createElement('span');
+        calBodyDay.appendChild(numBox);
         if(cellCounter < (firstDayOfMonth+1)) {
           calBodyDay.classList.add('cal-body-day',
                                    'day-from-other-month');
-          calBodyDay.textContent = ++prevMonthDates;
+          numBox.textContent = ++prevMonthDates;
         }else if (cellCounter > (firstDayOfMonth+daysInMonth)){
           calBodyDay.classList.add('cal-body-day',
                                    'day-from-other-month');
-          calBodyDay.textContent = nextMonthDates++;
+          numBox.textContent = nextMonthDates++;
         }else {
           calBodyDay.classList.add('cal-body-day',
                                    'day-from-this-month',
                                    'day-'+today.getFullYear()+'-'+today.getMonth()+'-'+dayCounter);
-          calBodyDay.textContent = dayCounter;
+          numBox.textContent = dayCounter;
           calBodyDay.addEventListener('click', function () {
             console.log('click! ');
           });
           ++dayCounter;
         }
         if (cellCounter <= 7) {
-          var currentValue = calBodyDay.textContent;
-          calBodyDay.textContent = WEEK[cellCounter] + ', ' + currentValue;
+          // var currentValue = numBox.textContent;
+          var weekDayBox = document.createElement('span');
+          weekDayBox.classList.add('week-day');
+          weekDayBox.textContent = WEEK[cellCounter] + ', ';
+          calBodyDay.prepend(weekDayBox);
         }
         calBodyWeek.appendChild(calBodyDay);
         ++cellCounter;
