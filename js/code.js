@@ -128,25 +128,48 @@ function Calendar() {
     var calPrev = document.createElement('input');
     setAttributes(calPrev, {'id' : 'cal-nav-prev',
                             'type' : 'button',
-                            'value' : '<<'});
-    calPrev.classList.add('cal-nav-btn');
+                            'value' : '<<',
+                            'class' : 'cal-nav-btn'});
     var calMonth = document.createElement('span');
     setAttributes(calMonth, {'id' : 'cal-nav-month'});
     calMonth.textContent = thisMonth.join(', ');
     var calNext = document.createElement('input');
     setAttributes(calNext, {'id' : 'cal-nav-next',
                             'type' : 'button',
-                            'value' : '>>'});
-    calNext.classList.add('cal-nav-btn');
+                            'value' : '>>',
+                            'class' : 'cal-nav-btn'});
     var calToday = document.createElement('input');
     setAttributes(calToday, {'id' : 'cal-nav-today',
                              'type' : 'button',
-                             'value' : 'Today'});
-    calToday.classList.add('cal-nav-btn');
+                             'value' : 'Today',
+                             'class' : 'cal-nav-btn'});
     var header = document.createElement('header');
     header.classList.add('calendar-header');
+    var headerContainer = document.createElement('div');
+    headerContainer.classList.add('header-container', 'clearfix');
+    var btnAdd = document.createElement('input');
+    setAttributes(btnAdd, {'id' : 'btnAdd',
+                           'type' : 'button',
+                           'value' : 'Add',
+                           'class' : 'header-btn'});
+    var btnRefresh = document.createElement('input');
+    setAttributes(btnRefresh, {'id' : 'btnRefresh',
+                               'type' : 'button',
+                               'value' : 'Refresh',
+                               'class' : 'header-btn'});
+    var searchIcon = document.createElement('span');
+    setAttributes(searchIcon, {'id' : 'searchIcon'});
+    var searchField = document.createElement('input');
+    setAttributes(searchField, {'id' : 'searchField',
+                               'type' : 'text',
+                               'placeholder' : 'Event, date or person'});
     // building DOM
     root.appendChild(header);
+    header.appendChild(headerContainer);
+    headerContainer.appendChild(btnAdd);
+    headerContainer.appendChild(btnRefresh);
+    headerContainer.appendChild(searchField);
+    headerContainer.appendChild(searchIcon);
     root.appendChild(calNav);
     calNav.appendChild(calPrev);
     calNav.appendChild(calMonth);
