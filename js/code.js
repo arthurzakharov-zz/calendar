@@ -42,7 +42,7 @@ function Calendar() {
   function markTodayDate() {
     var today = document.getElementsByClassName(verifyStr);
     for(var i = 0; i < today.length; ++i){
-      setAttributes(today[i], {'class' : 'today'});
+      setAttributes(today[i], {'id' : 'today'});
     }
   }
 
@@ -79,6 +79,25 @@ function Calendar() {
     };
   }
 
+  function clickOnDateHandler() {
+    var arrOfClasses = this.className.split(' ');
+    var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
+    var howCloseRightBorderIs = document.documentElement.clientWidth - this.offsetLeft;
+    var howCloseTopBorderIs = document.documentElement.clientHeight - this.offsetTop;
+    console.log(clickedDay);
+    var popupEvent = document.createElement('div');
+    if(howCloseRightBorderIs > 400 && howCloseTopBorderIs > 300) {
+      setAttributes(popupEvent, {'class': 'popupEvent--left'});
+    }else if(howCloseRightBorderIs > 400 && howCloseTopBorderIs < 300){
+      setAttributes(popupEvent, {'class' : 'popupEvent--left-top'});
+    }else if(howCloseRightBorderIs < 400 && howCloseTopBorderIs > 300) {
+      setAttributes(popupEvent, {'class' : 'popupEvent--right'});
+    }else {
+      setAttributes(popupEvent, {'class' : 'popupEvent--right-top'});
+    }
+    this.append(popupEvent);
+  }
+
   function createSheet(bodyElem) {
     var daysInMonth = getNumberOfDays();
     var firstDayOfMonth = getFirstDayOfMonth();
@@ -110,13 +129,10 @@ function Calendar() {
                                    'day-from-this-month',
                                    'day-'+today.getFullYear()+'-'+today.getMonth()+'-'+dayCounter);
           numBox.textContent = dayCounter;
-          calBodyDay.addEventListener('click', function () {
-            console.log('click! ');
-          });
+          calBodyDay.addEventListener('click', clickOnDateHandler);
           ++dayCounter;
         }
         if (cellCounter <= 7) {
-          // var currentValue = numBox.textContent;
           var weekDayBox = document.createElement('span');
           weekDayBox.classList.add('week-day');
           weekDayBox.textContent = WEEK[cellCounter] + ', ';
