@@ -85,7 +85,12 @@ function Calendar() {
     var howCloseRightBorderIs = document.documentElement.clientWidth - this.offsetLeft;
     var howCloseTopBorderIs = document.documentElement.clientHeight - this.offsetTop;
     console.log(clickedDay);
+    this.classList.add('day-selected');
     var popupEvent = document.createElement('div');
+    var table = document.getElementById('cal-body');
+    var blur = document.createElement('div');
+    blur.classList.add('blur');
+    table.append(blur);
     if(howCloseRightBorderIs > 400 && howCloseTopBorderIs > 300) {
       setAttributes(popupEvent, {'class': 'popupEvent--left'});
     }else if(howCloseRightBorderIs > 400 && howCloseTopBorderIs < 300){

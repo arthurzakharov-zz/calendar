@@ -3,6 +3,9 @@
     margin: 0 auto;
     border-collapse: collapse;
 }
+#cal-body {
+    position: relative;
+}
 #cal-nav {
     width: 90%;
     margin: 0 auto;
@@ -107,6 +110,9 @@
     color: deepskyblue;
     font-size: 22px;
 }
+.day-selected {
+    background-color: deepskyblue;
+}
 .popupEvent--left {
     position: absolute;
     top: 20px;
@@ -150,4 +156,13 @@
     background-color: white;
     border: 1px solid lightgray;
     box-shadow: 2px 2px 10px grey;
+}
+.blur {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0%;
+    background-color: lightskyblue;
+    opacity: .3;
 }
