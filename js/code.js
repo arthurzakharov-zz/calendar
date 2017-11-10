@@ -3,7 +3,10 @@ window.onload = function () {
   new Calendar();
 };
 
+var eventId = 0;
+
 var eventInfo = {};
+
 var returnableJSON = new Object();
 
 var WEEK = {
@@ -82,7 +85,7 @@ function Calendar() {
     };
   }
 
-  function createPopup(objOfCreation, dateName) {
+  function createPopup(objOfCreation, dateName, eventId) {
     var howCloseRightBorderIs = document.documentElement.clientWidth - objOfCreation.offsetLeft;
     var howCloseTopBorderIs = document.documentElement.clientHeight - objOfCreation.offsetTop;
     var popupEvent = document.createElement('div');
@@ -138,11 +141,11 @@ function Calendar() {
       setAttributes(popupEvent, {'class' : 'popupEvent--right-top'});
     }
     popupBtnOK.addEventListener('click', function () {
-      eventInfo[dateName] = new Object();
-      eventInfo[dateName].name = popupInputEvent.value;
-      eventInfo[dateName].date = popupInputDate.value;
-      eventInfo[dateName].participants = popupInputNames.value;
-      eventInfo[dateName].description = popupInputDescription.value;
+      eventInfo[dateName + '_id:event_' + eventId] = new Object();
+      eventInfo[dateName + '_id:event_' + eventId].name = popupInputEvent.value;
+      eventInfo[dateName + '_id:event_' + eventId].date = popupInputDate.value;
+      eventInfo[dateName + '_id:event_' + eventId].participants = popupInputNames.value;
+      eventInfo[dateName + '_id:event_' + eventId].description = popupInputDescription.value;
       returnableJSON = JSON.stringify(eventInfo);
       blur.remove();
       objOfCreation.classList.remove('day-selected');
@@ -160,10 +163,11 @@ function Calendar() {
     if (e.target != obj) {
       return true;
     } else {
+      var id = ++eventId;
       var arrOfClasses = obj.className.split(' ');
       var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
       obj.classList.add('day-selected');
-      var popup = createPopup(obj, clickedDay);
+      var popup = createPopup(obj, clickedDay, id);
       obj.append(popup);
     }
   } // end clickOnDateHandler
