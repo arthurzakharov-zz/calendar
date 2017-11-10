@@ -87,9 +87,47 @@ function Calendar() {
     console.log(clickedDay);
     this.classList.add('day-selected');
     var popupEvent = document.createElement('div');
+    var popupForm = document.createElement('form');
+    var popupInputEvent = document.createElement('input');
+    setAttributes(popupInputEvent, {'id' : 'popupEvent',
+                                    'type' : 'text',
+                                    'placeholder' : 'Event name',
+                                    'class' : 'popupInput'});
+    var popupInputDate = document.createElement('input');
+    setAttributes(popupInputDate, {'id' : 'popupDate',
+                                   'type' : 'text',
+                                   'placeholder' : 'date-month-year',
+                                   'class' : 'popupInput'});
+    var popupInputNames = document.createElement('input');
+    setAttributes(popupInputNames, {'id' : 'popupNames',
+                                    'type' : 'text',
+                                    'placeholder' : 'Participants names...',
+                                    'class' : 'popupInput'});
+    var popupInputDescription = document.createElement('textarea');
+    setAttributes(popupInputDescription, {'id' : 'popupDescription',
+                                          'row' : '4',
+                                          'placeholder' : 'Describe your event...',
+                                          'class' : 'popupInput'});
+    var popupBtnOK = document.createElement('input');
+    setAttributes(popupBtnOK, {'id' : 'popupBtnOk',
+                               'type' : 'button',
+                               'value' : 'OK',
+                               'class' : 'popupBtn'});
+    var popupBtnCancel = document.createElement('input');
+    setAttributes(popupBtnCancel, {'id' : 'popupBtnCancel',
+                                   'type' : 'button',
+                                   'value' : 'Cancel',
+                                   'class' : 'popupBtn'});
     var table = document.getElementById('cal-body');
     var blur = document.createElement('div');
     blur.classList.add('blur');
+    popupEvent.append(popupForm);
+    popupForm.append(popupInputEvent);
+    popupForm.append(popupInputDate);
+    popupForm.append(popupInputNames);
+    popupForm.append(popupInputDescription);
+    popupForm.append(popupBtnOK);
+    popupForm.append(popupBtnCancel);
     table.append(blur);
     if(howCloseRightBorderIs > 400 && howCloseTopBorderIs > 300) {
       setAttributes(popupEvent, {'class': 'popupEvent--left'});
@@ -101,7 +139,7 @@ function Calendar() {
       setAttributes(popupEvent, {'class' : 'popupEvent--right-top'});
     }
     this.append(popupEvent);
-  }
+  } // end clickOnDateHandler
 
   function createSheet(bodyElem) {
     var daysInMonth = getNumberOfDays();
@@ -137,6 +175,7 @@ function Calendar() {
           calBodyDay.addEventListener('click', clickOnDateHandler);
           ++dayCounter;
         }
+        // add days name to first week's days
         if (cellCounter <= 7) {
           var weekDayBox = document.createElement('span');
           weekDayBox.classList.add('week-day');
@@ -145,10 +184,10 @@ function Calendar() {
         }
         calBodyWeek.appendChild(calBodyDay);
         ++cellCounter;
-      }
-    }
+      } // end second for (days)
+    } // end first for (weeks)
     markTodayDate();
-  }
+  } // end createSheet
 
   function getCalendarHtml() {
 
@@ -157,49 +196,61 @@ function Calendar() {
       calMonth.textContent = thisMonth.join(', ');
       calBody.innerHTML = '';
       createSheet(calBody);
-    }
+    } // end remakeCalendar
 
     // creating elements
     var cal = document.createElement('table');
     cal.setAttribute('id', 'cal');
+
     var calBody = document.createElement('tbody');
     calBody.setAttribute('id', 'cal-body');
+
     var calNav = document.createElement('div');
     calNav.setAttribute('id', 'cal-nav');
+
     var calPrev = document.createElement('input');
     setAttributes(calPrev, {'id' : 'cal-nav-prev',
                             'type' : 'button',
                             'value' : '<<',
                             'class' : 'cal-nav-btn'});
+
     var calMonth = document.createElement('span');
     setAttributes(calMonth, {'id' : 'cal-nav-month'});
     calMonth.textContent = thisMonth.join(', ');
+
     var calNext = document.createElement('input');
     setAttributes(calNext, {'id' : 'cal-nav-next',
                             'type' : 'button',
                             'value' : '>>',
                             'class' : 'cal-nav-btn'});
+
     var calToday = document.createElement('input');
     setAttributes(calToday, {'id' : 'cal-nav-today',
                              'type' : 'button',
                              'value' : 'Today',
                              'class' : 'cal-nav-btn'});
+
     var header = document.createElement('header');
     header.classList.add('calendar-header');
+
     var headerContainer = document.createElement('div');
     headerContainer.classList.add('header-container', 'clearfix');
+
     var btnAdd = document.createElement('input');
     setAttributes(btnAdd, {'id' : 'btnAdd',
                            'type' : 'button',
                            'value' : 'Add',
                            'class' : 'header-btn'});
+
     var btnRefresh = document.createElement('input');
     setAttributes(btnRefresh, {'id' : 'btnRefresh',
                                'type' : 'button',
                                'value' : 'Refresh',
                                'class' : 'header-btn'});
+
     var searchIcon = document.createElement('span');
     setAttributes(searchIcon, {'id' : 'searchIcon'});
+
     var searchField = document.createElement('input');
     setAttributes(searchField, {'id' : 'searchField',
                                'type' : 'text',
@@ -218,8 +269,11 @@ function Calendar() {
     calNav.appendChild(calToday);
     root.appendChild(cal);
     cal.appendChild(calBody);
+
     // create sheet of calendar with dates
     createSheet(calBody);
+
+    // adding events
     calPrev.addEventListener('click', function () {
       today = changeMonth(false)();
       remakeCalendar();
@@ -232,8 +286,9 @@ function Calendar() {
       today = new Date();
       remakeCalendar();
     });
+
     return cal;
-  }
+  } // end getCalendarHtml
 
   return getCalendarHtml();
-}
+} // end Calendar
