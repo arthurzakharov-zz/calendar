@@ -204,7 +204,7 @@ function Calendar() {
         }else {
           calBodyDay.classList.add('cal-body-day',
                                    'day-from-this-month',
-                                   'day-'+today.getFullYear()+'-'+today.getMonth()+'-'+dayCounter);
+                                   'day-'+today.getFullYear()+'-'+(today.getMonth()+1)+'-'+dayCounter);
           numBox.textContent = dayCounter;
           calBodyDay.addEventListener('click', function (event) {clickOnDateHandler(event, this)});
           ++dayCounter;
