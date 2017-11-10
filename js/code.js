@@ -84,6 +84,8 @@ function Calendar() {
     var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
     var howCloseRightBorderIs = document.documentElement.clientWidth - this.offsetLeft;
     var howCloseTopBorderIs = document.documentElement.clientHeight - this.offsetTop;
+    console.log('howCloseRightBorderIs - ' + howCloseRightBorderIs);
+    console.log('howCloseTopBorderIs - ' + howCloseTopBorderIs);
     console.log(clickedDay);
     this.classList.add('day-selected');
     var popupEvent = document.createElement('div');

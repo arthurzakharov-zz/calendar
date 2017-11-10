@@ -127,7 +127,7 @@
 .popupEvent--right-top,
 .popupEvent--left,
 .popupEvent--right,
-.popupEvent--right-top {
+.popupEvent--left-top {
     position: absolute;
     width: 230px;
     height: 280px;
