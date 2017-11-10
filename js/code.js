@@ -139,13 +139,17 @@ function Calendar() {
     return popupEvent;
   } // end createPopup
 
-  function clickOnDateHandler() {
-    var arrOfClasses = this.className.split(' ');
-    var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
-    console.log(clickedDay);
-    this.classList.add('day-selected');
-    var popup = createPopup(this);
-    this.append(popup);
+  function clickOnDateHandler(e, obj) {
+    if (e.target != obj) {
+      return true;
+    } else {
+      var arrOfClasses = obj.className.split(' ');
+      var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
+      console.log(clickedDay);
+      obj.classList.add('day-selected');
+      var popup = createPopup(obj);
+      obj.append(popup);
+    }
   } // end clickOnDateHandler
 
   function createSheet(bodyElem) {
@@ -179,7 +183,7 @@ function Calendar() {
                                    'day-from-this-month',
                                    'day-'+today.getFullYear()+'-'+today.getMonth()+'-'+dayCounter);
           numBox.textContent = dayCounter;
-          calBodyDay.addEventListener('click', clickOnDateHandler);
+          calBodyDay.addEventListener('click', function (event) {clickOnDateHandler(event, this)});
           ++dayCounter;
         }
         // add days name to first week's days
