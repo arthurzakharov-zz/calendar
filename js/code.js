@@ -86,6 +86,8 @@ function Calendar() {
   }
 
   function createPopup(objOfCreation, dateName, eventId) {
+    var preconfiguredDate  = dateName.split('-').reverse().join('-');
+    console.log(preconfiguredDate);
     var howCloseRightBorderIs = document.documentElement.clientWidth - objOfCreation.offsetLeft;
     var howCloseTopBorderIs = document.documentElement.clientHeight - objOfCreation.offsetTop;
     var popupEvent = document.createElement('div');
@@ -98,8 +100,9 @@ function Calendar() {
     var popupInputDate = document.createElement('input');
     setAttributes(popupInputDate, {'id' : 'popupDate',
       'type' : 'text',
-      'placeholder' : 'date-month-year',
-      'class' : 'popupInput'});
+      'value' : preconfiguredDate,
+      'class' : 'popupInput',
+      'disabled' : ''});
     var popupInputNames = document.createElement('input');
     setAttributes(popupInputNames, {'id' : 'popupNames',
       'type' : 'text',
