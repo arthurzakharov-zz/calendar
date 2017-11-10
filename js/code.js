@@ -79,6 +79,10 @@ function Calendar() {
     };
   }
 
+  function createPopup(objOfCreation) {
+
+  }
+
   function clickOnDateHandler() {
     var arrOfClasses = this.className.split(' ');
     var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
@@ -120,7 +124,7 @@ function Calendar() {
                                    'type' : 'button',
                                    'value' : 'Cancel',
                                    'class' : 'popupBtn'});
-    var table = document.getElementById('cal-body');
+    var table = document.getElementById('root');
     var blur = document.createElement('div');
     blur.classList.add('blur');
     popupEvent.append(popupForm);
