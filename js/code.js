@@ -136,6 +136,14 @@ function Calendar() {
     }else {
       setAttributes(popupEvent, {'class' : 'popupEvent--right-top'});
     }
+    popupBtnOK.addEventListener('click', function () {
+      console.log('ok');
+    });
+    popupBtnCancel.addEventListener('click', function () {
+      blur.remove();
+      objOfCreation.classList.remove('day-selected');
+      popupEvent.remove();
+    });
     return popupEvent;
   } // end createPopup
 
