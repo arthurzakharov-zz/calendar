@@ -24,6 +24,8 @@
     font-size: 10px;
     font-weight: 400;
     box-shadow: 2px 2px gray;
+    cursor: pointer;
+    outline: none;
 }
 .cal-nav-btn:active {
     box-shadow: 1px 1px gray;
@@ -94,9 +96,12 @@
     color: white;
     border: 1px solid transparent;
     border-radius: 10px;
+    outline: none;
+    cursor: pointer;
 }
 #searchField,
 #searchIcon {
+    outline: none;
     float: right;
     height: 28px;
 }
@@ -164,6 +169,7 @@
     box-shadow: 1px 1px 8px dimgray;
     font-size: 12px;
     font-family: sans-serif;
+    outline: none;
 }
 #popupDescription {
     margin-top: 25px;
@@ -184,6 +190,7 @@
     font-weight: 600;
     cursor: pointer;
     box-shadow: 2px 2px dimgrey;
+    outline: none;
 }
 .popupBtn:active {
     background-color: lightgray;
