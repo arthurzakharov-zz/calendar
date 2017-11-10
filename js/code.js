@@ -3,6 +3,9 @@ window.onload = function () {
   new Calendar();
 };
 
+var eventInfo = {};
+var returnableJSON = new Object();
+
 var WEEK = {
   1 : 'Sunday',
   2 : 'Monday',
@@ -79,11 +82,9 @@ function Calendar() {
     };
   }
 
-  function createPopup(objOfCreation) {
+  function createPopup(objOfCreation, dateName) {
     var howCloseRightBorderIs = document.documentElement.clientWidth - objOfCreation.offsetLeft;
     var howCloseTopBorderIs = document.documentElement.clientHeight - objOfCreation.offsetTop;
-    // console.log('howCloseRightBorderIs - ' + howCloseRightBorderIs);
-    // console.log('howCloseTopBorderIs - ' + howCloseTopBorderIs);
     var popupEvent = document.createElement('div');
     var popupForm = document.createElement('form');
     var popupInputEvent = document.createElement('input');
@@ -137,7 +138,15 @@ function Calendar() {
       setAttributes(popupEvent, {'class' : 'popupEvent--right-top'});
     }
     popupBtnOK.addEventListener('click', function () {
-      console.log('ok');
+      eventInfo[dateName] = new Object();
+      eventInfo[dateName].name = popupInputEvent.value;
+      eventInfo[dateName].date = popupInputDate.value;
+      eventInfo[dateName].participants = popupInputNames.value;
+      eventInfo[dateName].description = popupInputDescription.value;
+      returnableJSON = JSON.stringify(eventInfo);
+      blur.remove();
+      objOfCreation.classList.remove('day-selected');
+      popupEvent.remove();
     });
     popupBtnCancel.addEventListener('click', function () {
       blur.remove();
@@ -153,9 +162,8 @@ function Calendar() {
     } else {
       var arrOfClasses = obj.className.split(' ');
       var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
-      console.log(clickedDay);
       obj.classList.add('day-selected');
-      var popup = createPopup(obj);
+      var popup = createPopup(obj, clickedDay);
       obj.append(popup);
     }
   } // end clickOnDateHandler
