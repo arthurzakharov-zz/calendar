@@ -80,50 +80,42 @@ function Calendar() {
   }
 
   function createPopup(objOfCreation) {
-
-  }
-
-  function clickOnDateHandler() {
-    var arrOfClasses = this.className.split(' ');
-    var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
-    var howCloseRightBorderIs = document.documentElement.clientWidth - this.offsetLeft;
-    var howCloseTopBorderIs = document.documentElement.clientHeight - this.offsetTop;
-    console.log('howCloseRightBorderIs - ' + howCloseRightBorderIs);
-    console.log('howCloseTopBorderIs - ' + howCloseTopBorderIs);
-    console.log(clickedDay);
-    this.classList.add('day-selected');
+    var howCloseRightBorderIs = document.documentElement.clientWidth - objOfCreation.offsetLeft;
+    var howCloseTopBorderIs = document.documentElement.clientHeight - objOfCreation.offsetTop;
+    // console.log('howCloseRightBorderIs - ' + howCloseRightBorderIs);
+    // console.log('howCloseTopBorderIs - ' + howCloseTopBorderIs);
     var popupEvent = document.createElement('div');
     var popupForm = document.createElement('form');
     var popupInputEvent = document.createElement('input');
     setAttributes(popupInputEvent, {'id' : 'popupEvent',
-                                    'type' : 'text',
-                                    'placeholder' : 'Event name',
-                                    'class' : 'popupInput'});
+      'type' : 'text',
+      'placeholder' : 'Event name',
+      'class' : 'popupInput'});
     var popupInputDate = document.createElement('input');
     setAttributes(popupInputDate, {'id' : 'popupDate',
-                                   'type' : 'text',
-                                   'placeholder' : 'date-month-year',
-                                   'class' : 'popupInput'});
+      'type' : 'text',
+      'placeholder' : 'date-month-year',
+      'class' : 'popupInput'});
     var popupInputNames = document.createElement('input');
     setAttributes(popupInputNames, {'id' : 'popupNames',
-                                    'type' : 'text',
-                                    'placeholder' : 'Participants names...',
-                                    'class' : 'popupInput'});
+      'type' : 'text',
+      'placeholder' : 'Participants names...',
+      'class' : 'popupInput'});
     var popupInputDescription = document.createElement('textarea');
     setAttributes(popupInputDescription, {'id' : 'popupDescription',
-                                          'row' : '4',
-                                          'placeholder' : 'Describe your event...',
-                                          'class' : 'popupInput'});
+      'row' : '4',
+      'placeholder' : 'Describe your event...',
+      'class' : 'popupInput'});
     var popupBtnOK = document.createElement('input');
     setAttributes(popupBtnOK, {'id' : 'popupBtnOk',
-                               'type' : 'button',
-                               'value' : 'OK',
-                               'class' : 'popupBtn'});
+      'type' : 'button',
+      'value' : 'OK',
+      'class' : 'popupBtn'});
     var popupBtnCancel = document.createElement('input');
     setAttributes(popupBtnCancel, {'id' : 'popupBtnCancel',
-                                   'type' : 'button',
-                                   'value' : 'Cancel',
-                                   'class' : 'popupBtn'});
+      'type' : 'button',
+      'value' : 'Cancel',
+      'class' : 'popupBtn'});
     var table = document.getElementById('root');
     var blur = document.createElement('div');
     blur.classList.add('blur');
@@ -144,7 +136,16 @@ function Calendar() {
     }else {
       setAttributes(popupEvent, {'class' : 'popupEvent--right-top'});
     }
-    this.append(popupEvent);
+    return popupEvent;
+  } // end createPopup
+
+  function clickOnDateHandler() {
+    var arrOfClasses = this.className.split(' ');
+    var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
+    console.log(clickedDay);
+    this.classList.add('day-selected');
+    var popup = createPopup(this);
+    this.append(popup);
   } // end clickOnDateHandler
 
   function createSheet(bodyElem) {
