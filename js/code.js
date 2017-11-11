@@ -34,6 +34,12 @@ var MONTH = {
   11 : 'December'
 };
 
+function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
+
 function Calendar() {
   var root = document.getElementById('root');
   var today = new Date();
@@ -71,12 +77,6 @@ function Calendar() {
     var d = new Date(today.getFullYear(), today.getMonth(), 0);
     return d.getDate();
   }
-
-  function setAttributes(el, attrs) {
-    for(var key in attrs) {
-      el.setAttribute(key, attrs[key]);
-    }
-  }
   
   function changeMonth(next) {
     return function () {
@@ -87,7 +87,6 @@ function Calendar() {
 
   function createPopup(objOfCreation, dateName, eventId) {
     var preconfiguredDate  = dateName.split('-').reverse().join('-');
-    console.log(preconfiguredDate);
     var howCloseRightBorderIs = document.documentElement.clientWidth - objOfCreation.offsetLeft;
     var howCloseTopBorderIs = document.documentElement.clientHeight - objOfCreation.offsetTop;
     var popupEvent = document.createElement('div');
@@ -97,22 +96,26 @@ function Calendar() {
       'type' : 'text',
       'placeholder' : 'Event name',
       'class' : 'popupInput'});
+    popupInputEvent.addEventListener('focusout', jsValidator.event);
     var popupInputDate = document.createElement('input');
     setAttributes(popupInputDate, {'id' : 'popupDate',
       'type' : 'text',
       'value' : preconfiguredDate,
       'class' : 'popupInput',
       'disabled' : ''});
+    popupInputDate.addEventListener('focusout', jsValidator.eventDate);
     var popupInputNames = document.createElement('input');
     setAttributes(popupInputNames, {'id' : 'popupNames',
       'type' : 'text',
       'placeholder' : 'Participants names...',
       'class' : 'popupInput'});
+    popupInputNames.addEventListener('focusout', jsValidator.eventNames);
     var popupInputDescription = document.createElement('textarea');
     setAttributes(popupInputDescription, {'id' : 'popupDescription',
       'row' : '4',
       'placeholder' : 'Describe your event...',
       'class' : 'popupInput'});
+    popupInputDescription.addEventListener('focusout', jsValidator.eventDescription);
     var popupBtnOK = document.createElement('input');
     setAttributes(popupBtnOK, {'id' : 'popupBtnOk',
       'type' : 'button',
@@ -126,11 +129,25 @@ function Calendar() {
     var table = document.getElementById('root');
     var blur = document.createElement('div');
     blur.classList.add('blur');
+    var inputContainerEvent = document.createElement('div');
+    setAttributes(inputContainerEvent, {'class' : 'inputContainer'});
+    var inputContainerDate = document.createElement('div');
+    setAttributes(inputContainerDate, {'class' : 'inputContainer'});
+    var inputContainerNames = document.createElement('div');
+    setAttributes(inputContainerNames, {'class' : 'inputContainer'});
+    var inputContainerDescr = document.createElement('div');
+    setAttributes(inputContainerDescr, {'class' : 'inputContainer'});
+    var message = document.createElement('div');
+    setAttributes(message, {'class' : 'errorMessage'});
     popupEvent.append(popupForm);
-    popupForm.append(popupInputEvent);
-    popupForm.append(popupInputDate);
-    popupForm.append(popupInputNames);
-    popupForm.append(popupInputDescription);
+    popupForm.append(inputContainerEvent);
+    inputContainerEvent.append(popupInputEvent);
+    popupForm.append(inputContainerDate);
+    inputContainerDate.append(popupInputDate);
+    popupForm.append(inputContainerNames);
+    inputContainerNames.append(popupInputNames);
+    popupForm.append(inputContainerDescr);
+    inputContainerDescr.append(popupInputDescription);
     popupForm.append(popupBtnOK);
     popupForm.append(popupBtnCancel);
     table.append(blur);
@@ -144,15 +161,17 @@ function Calendar() {
       setAttributes(popupEvent, {'class' : 'popupEvent--right-top'});
     }
     popupBtnOK.addEventListener('click', function () {
-      eventInfo[dateName + '_id:event_' + eventId] = new Object();
-      eventInfo[dateName + '_id:event_' + eventId].name = popupInputEvent.value;
-      eventInfo[dateName + '_id:event_' + eventId].date = popupInputDate.value;
-      eventInfo[dateName + '_id:event_' + eventId].participants = popupInputNames.value;
-      eventInfo[dateName + '_id:event_' + eventId].description = popupInputDescription.value;
-      returnableJSON = JSON.stringify(eventInfo);
-      blur.remove();
-      objOfCreation.classList.remove('day-selected');
-      popupEvent.remove();
+      if(!jsValidator.errors) {
+        eventInfo[dateName + '_id:event_' + eventId] = new Object();
+        eventInfo[dateName + '_id:event_' + eventId].name = popupInputEvent.value;
+        eventInfo[dateName + '_id:event_' + eventId].date = popupInputDate.value;
+        eventInfo[dateName + '_id:event_' + eventId].participants = popupInputNames.value;
+        eventInfo[dateName + '_id:event_' + eventId].description = popupInputDescription.value;
+        returnableJSON = JSON.stringify(eventInfo);
+        blur.remove();
+        objOfCreation.classList.remove('day-selected');
+        popupEvent.remove();
+      }
     });
     popupBtnCancel.addEventListener('click', function () {
       blur.remove();
@@ -325,4 +344,71 @@ function Calendar() {
   } // end getCalendarHtml
 
   return getCalendarHtml();
+
 } // end Calendar
+
+var jsValidator = {
+  "event": function () {
+    // between 5 and 30 symbols
+    if(this.value.length > 5 && this.value.length < 30) {
+      correctField(this);
+    }else {
+      errorField(this, 'Between 5 and 30 symbols, please  ');
+    }
+  }, /* end event name */
+  'eventDate': function () {
+    // format dd-mm-yyyy only 19-- and 20--
+    var dateFormate = /^[0-3][0-9]-[0|1][0-9]-(19|20)[0-9]{2}/;
+    if(dateFormate.test(this.value)) {
+      correctField(this);
+    }else {
+      errorField(this, 'Only dd-mm-yyyy format, please');
+    }
+  }, /* end event date */
+  "eventNames": function () {
+    // only letters not numbers between 2 and 20 symbols each
+    var onlyLetters =  /^[A-Za-z]+$/;
+    function splitAndCheck(string) {
+      var result = false;
+      var array = string.split(' ');
+      array.forEach(function (item) {
+        if(item.length > 2 && onlyLetters.test(item) && item.length < 20) {
+          result = true;
+        }
+      });
+      return result;
+    }
+    if(splitAndCheck(this.value)) {
+      correctField(this);
+    }else {
+      errorField(this, 'Only letters each name 2 and 20 symbols');
+    }
+  }, /* end event person */
+  'eventDescription': function () {
+    // not more then 320 symbols
+    if(this.value.length < 320) {
+      correctField(this);
+    }else {
+      errorField(this, 'Not more the 320 symbols, please');
+    }
+  } /* end event description */
+} /* end jqValidator */
+
+function correctField(obj) {
+  jsValidator.errors = false;
+  obj.classList.remove('errorField');
+  obj.classList.add('correctField');
+}
+
+function errorField(obj, text) {
+  jsValidator.errors = true;
+  var message = document.createElement('span');
+  setAttributes(message, {'class' : 'errorMessage'});
+  message.textContent = text;
+  setTimeout(function () {
+    message.remove();
+  }, 3000);
+  obj.parentNode.appendChild(message);
+  obj.classList.remove('correctField');
+  obj.classList.add('errorField');
+}
