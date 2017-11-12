@@ -1,13 +1,83 @@
 window.onload = function () {
-
   new Calendar();
 };
+
+function correctField(obj, type) {
+  jsValidator.errors[type] = false;
+
+  obj.classList.remove('errorField');
+  obj.classList.add('correctField');
+}
+
+function errorField(obj, type, text) {
+  jsValidator.errors[type] = true;
+  var message = document.createElement('span');
+  setAttributes(message, {'class' : 'errorMessage'});
+  message.textContent = text;
+  setTimeout(function () {
+    message.remove();
+  }, 3000);
+  obj.parentNode.appendChild(message);
+  obj.classList.remove('correctField');
+  obj.classList.add('errorField');
+}
+
+var jsValidator = {
+  'errors' : {
+    'event' : true,
+    'eventDate' : false,
+    'eventNames' : true,
+    'eventDescription': true
+  },
+  'event': function () {
+    // between 5 and 30 symbols
+    if(this.value.length > 5 && this.value.length < 30) {
+      correctField(this, 'event');
+    }else {
+      errorField(this, 'event', 'Between 5 and 30 symbols, please  ');
+    }
+  }, /* end event name */
+  'eventDate': function () {
+    // format dd-mm-yyyy only 19-- and 20--
+    var dateFormate = /^[0-3][0-9]-[0|1][0-9]-(19|20)[0-9]{2}/;
+    if(dateFormate.test(this.value)) {
+      correctField(this, 'eventDate');
+    }else {
+      errorField(this, 'eventDate', 'Only dd-mm-yyyy format, please');
+    }
+  }, /* end event date */
+  'eventNames': function () {
+    // only letters not numbers between 2 and 20 symbols each
+    var onlyLetters =  /^[A-Za-z]+$/;
+    function splitAndCheck(string) {
+      var result = false;
+      var array = string.split(' ');
+      array.forEach(function (item) {
+        if(item.length > 2 && onlyLetters.test(item) && item.length < 20) {
+          result = true;
+        }
+      });
+      return result;
+    }
+    if(splitAndCheck(this.value)) {
+      correctField(this, 'eventNames');
+    }else {
+      errorField(this, 'eventNames', 'Only letters each name 2 and 20 symbols');
+    }
+  }, /* end event person */
+  'eventDescription': function () {
+    // not more then 320 symbols
+    if(this.value.length < 320) {
+      correctField(this, 'eventDescription');
+    }else {
+      errorField(this, 'eventDescription', 'Not more the 320 symbols, please');
+    }
+  } /* end event description */
+} /* end jqValidator */
 
 var eventId = 0;
 
 var eventInfo = {};
-
-var returnableJSON = new Object();
 
 var WEEK = {
   1 : 'Sunday',
@@ -48,13 +118,12 @@ function Calendar() {
   var day = today.getDate();
   var thisMonth = [today.getFullYear(), MONTH[today.getMonth()]];
   var tDate = new Date();
-  var verifyStr = 'day-' + tDate.getFullYear() + '-' + tDate.getMonth() + '-' + tDate.getDate();
-
+  var verifyStr = tDate.getFullYear() + '-' + (tDate.getMonth()+1) + '-' + tDate.getDate();
 
   function markTodayDate() {
-    var today = document.getElementsByClassName(verifyStr);
-    for(var i = 0; i < today.length; ++i){
-      setAttributes(today[i], {'id' : 'today'});
+    var today = document.getElementById(verifyStr);
+    if(today !== null){
+     today.classList.add('today');
     }
   }
 
@@ -83,6 +152,51 @@ function Calendar() {
       (next) ? ++month : --month;
       return new Date(year, month, 1);
     };
+  }
+
+  function createListOfEvents(arrayOfId, arrayOfEvent) {
+    var listOfEvents = document.getElementById('list');
+    listOfEvents.innerHTML = '';
+    function isAlreadyInList(eventId) {
+      var result = false;
+      var listOfEventsChildren = listOfEvents.children;
+      for (var i = 0; i < listOfEventsChildren.length; i++) {
+        if(eventId == listOfEventsChildren[i].id){
+          result = true;
+        }
+      }
+      return result;
+    }
+    for(z in arrayOfEvent) {
+      var eventDisplayed = document.createElement('div');
+      setAttributes(eventDisplayed, {'id' : arrayOfId[z]});
+      var eventDisplayedTitle = document.createElement('div');
+      eventDisplayedTitle.classList.add('eventDisplayedTitle');
+      eventDisplayedTitle.textContent = arrayOfEvent[z].name;
+      var eventDisplayedDate = document.createElement('div');
+      eventDisplayedDate.classList.add('eventDisplayedDate');
+      eventDisplayedDate.textContent = arrayOfEvent[z].date;
+      eventDisplayed.appendChild(eventDisplayedTitle);
+      eventDisplayed.appendChild(eventDisplayedDate);
+      if (!isAlreadyInList(arrayOfId[z])){
+        listOfEvents.append(eventDisplayed);
+      }
+    }
+    listOfEvents.classList.remove('hide');
+  }
+  
+  function createEventOnList(idName) {
+    var eventBody = document.createElement('div');
+    setAttributes(eventBody, {'id' : idName, 'class' : 'eventBody'});
+    var eventTitle = document.createElement('div');
+    setAttributes(eventTitle, {'class' : 'eventTitle'});
+    var eventPeople = document.createElement('div');
+    setAttributes(eventPeople, {'class' : 'eventPeople'});
+    eventTitle.textContent = eventInfo[idName].name;
+    eventPeople.textContent = eventInfo[idName].participants;
+    eventBody.append(eventTitle);
+    eventBody.append(eventPeople);
+    return eventBody;
   }
 
   function createPopup(objOfCreation, dateName, eventId) {
@@ -161,16 +275,17 @@ function Calendar() {
       setAttributes(popupEvent, {'class' : 'popupEvent--right-top'});
     }
     popupBtnOK.addEventListener('click', function () {
-      if(!jsValidator.errors) {
+      if(!jsValidator.errors.event && !jsValidator.errors.eventDate && !jsValidator.errors.eventNames && !jsValidator.errors.eventDescription) {
+        var eventName = dateName + '_id:event_' + eventId;
         eventInfo[dateName + '_id:event_' + eventId] = new Object();
         eventInfo[dateName + '_id:event_' + eventId].name = popupInputEvent.value;
         eventInfo[dateName + '_id:event_' + eventId].date = popupInputDate.value;
         eventInfo[dateName + '_id:event_' + eventId].participants = popupInputNames.value;
         eventInfo[dateName + '_id:event_' + eventId].description = popupInputDescription.value;
-        returnableJSON = JSON.stringify(eventInfo);
         blur.remove();
         objOfCreation.classList.remove('day-selected');
         popupEvent.remove();
+        objOfCreation.append(createEventOnList(eventName));
       }
     });
     popupBtnCancel.addEventListener('click', function () {
@@ -182,12 +297,15 @@ function Calendar() {
   } // end createPopup
 
   function clickOnDateHandler(e, obj) {
+    var list = document.getElementById('list');
+    list.classList.add('hide');
+    list.innerHTML = '';
     if (e.target != obj) {
       return true;
     } else {
       var id = ++eventId;
-      var arrOfClasses = obj.className.split(' ');
-      var clickedDay = arrOfClasses[arrOfClasses.length-1].substring(4);
+      var arrOfClasses = obj.id;
+      var clickedDay = arrOfClasses;
       obj.classList.add('day-selected');
       var popup = createPopup(obj, clickedDay, id);
       obj.append(popup);
@@ -221,9 +339,10 @@ function Calendar() {
                                    'day-from-other-month');
           numBox.textContent = nextMonthDates++;
         }else {
-          calBodyDay.classList.add('cal-body-day',
-                                   'day-from-this-month',
-                                   'day-'+today.getFullYear()+'-'+(today.getMonth()+1)+'-'+dayCounter);
+          var id = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+dayCounter;
+          setAttributes(calBodyDay, {'id' : id,
+                                      'class' : 'cal-body-day day-from-this-month'
+          });
           numBox.textContent = dayCounter;
           calBodyDay.addEventListener('click', function (event) {clickOnDateHandler(event, this)});
           ++dayCounter;
@@ -236,6 +355,13 @@ function Calendar() {
           calBodyDay.prepend(weekDayBox);
         }
         calBodyWeek.appendChild(calBodyDay);
+        // TO BE UPDATED WITH FOR OR SMTH ELSE
+        for(var z = 1; z <= eventId; z++) {
+          var key = calBodyDay.id + '_id:event_' + z;
+          if(eventInfo[key]){
+            calBodyDay.append(createEventOnList(key));
+          }
+        }
         ++cellCounter;
       } // end second for (days)
     } // end first for (weeks)
@@ -308,13 +434,19 @@ function Calendar() {
     setAttributes(searchField, {'id' : 'searchField',
                                'type' : 'text',
                                'placeholder' : 'Event, date or person'});
+    var list = document.createElement('div');
+    setAttributes(list, {'id' : 'list', 'class' : 'hide'});
+    var container = document.createElement('div');
+    setAttributes(container, {'class' : 'searchContainer'});
     // building DOM
     root.appendChild(header);
     header.appendChild(headerContainer);
     headerContainer.appendChild(btnAdd);
     headerContainer.appendChild(btnRefresh);
-    headerContainer.appendChild(searchField);
-    headerContainer.appendChild(searchIcon);
+    headerContainer.appendChild(container);
+    container.appendChild(searchField);
+    container.appendChild(searchIcon);
+    container.appendChild(list);
     root.appendChild(calNav);
     calNav.appendChild(calPrev);
     calNav.appendChild(calMonth);
@@ -339,6 +471,32 @@ function Calendar() {
       today = new Date();
       remakeCalendar();
     });
+    headerContainer.addEventListener('click', function () {
+      var list = document.getElementById('list');
+      list.classList.add('hide');
+      list.innerHTML = '';
+    });
+    searchField.addEventListener('keyup', function () {
+      var input = this.value;
+      if(input != ''){
+        var arrayOfEvents = [];
+        var arrayOfEventId = [];
+        for(firstLevelKey in eventInfo) {
+          var subKey = eventInfo[firstLevelKey];
+          for(secondLevelKey in subKey){
+            if(!(subKey[secondLevelKey].indexOf(input) == -1)){
+              arrayOfEvents.push(eventInfo[firstLevelKey]);
+              arrayOfEventId.push(firstLevelKey);
+              createListOfEvents(arrayOfEventId, arrayOfEvents);
+            }
+          }
+        }
+      }else {
+        var list = document.getElementById('list');
+        list.classList.add('hide');
+        list.innerHTML = '';
+      }
+    });
 
     return cal;
   } // end getCalendarHtml
@@ -347,68 +505,5 @@ function Calendar() {
 
 } // end Calendar
 
-var jsValidator = {
-  "event": function () {
-    // between 5 and 30 symbols
-    if(this.value.length > 5 && this.value.length < 30) {
-      correctField(this);
-    }else {
-      errorField(this, 'Between 5 and 30 symbols, please  ');
-    }
-  }, /* end event name */
-  'eventDate': function () {
-    // format dd-mm-yyyy only 19-- and 20--
-    var dateFormate = /^[0-3][0-9]-[0|1][0-9]-(19|20)[0-9]{2}/;
-    if(dateFormate.test(this.value)) {
-      correctField(this);
-    }else {
-      errorField(this, 'Only dd-mm-yyyy format, please');
-    }
-  }, /* end event date */
-  "eventNames": function () {
-    // only letters not numbers between 2 and 20 symbols each
-    var onlyLetters =  /^[A-Za-z]+$/;
-    function splitAndCheck(string) {
-      var result = false;
-      var array = string.split(' ');
-      array.forEach(function (item) {
-        if(item.length > 2 && onlyLetters.test(item) && item.length < 20) {
-          result = true;
-        }
-      });
-      return result;
-    }
-    if(splitAndCheck(this.value)) {
-      correctField(this);
-    }else {
-      errorField(this, 'Only letters each name 2 and 20 symbols');
-    }
-  }, /* end event person */
-  'eventDescription': function () {
-    // not more then 320 symbols
-    if(this.value.length < 320) {
-      correctField(this);
-    }else {
-      errorField(this, 'Not more the 320 symbols, please');
-    }
-  } /* end event description */
-} /* end jqValidator */
 
-function correctField(obj) {
-  jsValidator.errors = false;
-  obj.classList.remove('errorField');
-  obj.classList.add('correctField');
-}
 
-function errorField(obj, text) {
-  jsValidator.errors = true;
-  var message = document.createElement('span');
-  setAttributes(message, {'class' : 'errorMessage'});
-  message.textContent = text;
-  setTimeout(function () {
-    message.remove();
-  }, 3000);
-  obj.parentNode.appendChild(message);
-  obj.classList.remove('correctField');
-  obj.classList.add('errorField');
-}

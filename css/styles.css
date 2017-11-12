@@ -2,8 +2,8 @@
     padding-bottom: 3vh;
 }
 #cal {
+    position: relative;
     width: 95%;
-    height: 82vh;
     margin: 0 auto;
     border-collapse: collapse;
 }
@@ -44,9 +44,9 @@
 }
 .cal-body-day {
     width: 13.57%;
+    height: 100px;
     border: 1px solid lightgray;
-    padding-top: 5px;
-    padding-left: 5px;
+    padding: 5px;
     vertical-align: top;
     text-align: left;
     color: dimgray;
@@ -56,7 +56,6 @@
 .calendar-header {
     height: 10vh;
     background-color: lightgrey;
-    opacity: .6;
 }
 .clearfix:after {
     display: block;
@@ -72,7 +71,7 @@
 .day-from-this-month:hover {
     background-color: aliceblue;
 }
-#today {
+.today {
     border: 3px solid deepskyblue;
     vertical-align: top;
     color: dimgray;
@@ -226,6 +225,60 @@
     padding: 5px 2px;
     background-color: lightpink;
     position: absolute;
-    z-index: 300;
+    z-index: 15;
     text-align: center;
+}
+.eventBody {
+    margin: 4px 0;
+    background-color: lightblue;
+    padding: 5px;
+    border-radius: 10px;
+}
+.eventPeople {
+    font-family: serif;
+    font-size: 11px;
+    color: black;
+    padding: 5px 0;
+}
+.eventTitle {
+    font-family: cursive;
+    font-style: normal;
+    font-size: 14px;
+    color: gray;
+    text-decoration: underline;
+}
+.searchContainer {
+    position: relative;
+    float: right;
+}
+#list {
+    position: absolute;
+    width: 240px;
+    padding: 10px 40px;
+    text-align: right;
+    background-color: lightgray;
+    border: 1px solid slategray;
+    border-radius: 15px;
+    right: 0;
+    top: 35px;
+    z-index: 50;
+}
+.hide {
+    display: none;
+}
+.eventDisplayed {
+    margin: 5px 0;
+}
+.eventDisplayedTitle {
+    font-family: cursive;
+    font-style: normal;
+    font-size: 14px;
+    color: gray;
+    text-decoration: underline;
+}
+.eventDisplayedDate {
+    font-family: serif;
+    font-size: 11px;
+    color: black;
+    padding: 5px 0;
 }
