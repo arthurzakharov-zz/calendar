@@ -85,8 +85,8 @@
     margin: 0 auto;
     padding-top: 5vh;
 }
-#btnAdd,
-#btnRefresh {
+#btn-add,
+#btn-refresh {
     float: left;
     width: 80px;
     margin-right: 15px;
@@ -97,14 +97,20 @@
     border-radius: 10px;
     outline: none;
     cursor: pointer;
+    box-shadow: 2px 2px lightsteelblue;
 }
-#searchField,
-#searchIcon {
+#btn-add:active,
+#btn-refresh:active {
+    box-shadow: 1px 1px lightsteelblue;
+    transform: translate(1px, 1px);
+}
+#search-field,
+#search-icon {
     outline: none;
     float: right;
     height: 28px;
 }
-#searchIcon {
+#search-icon {
     width: 28px;
     background-image: url("../img/search.png");
     background-position: center;
@@ -112,7 +118,7 @@
     background-size: contain;
     margin-right: 5px;
 }
-#searchField {
+#search-field {
     width: 200px;
     padding: 0 5px;
     border-radius: 10px;
@@ -129,10 +135,11 @@
 .day-selected:hover {
     background-color: lightskyblue;
 }
-.popupEvent--right-top,
-.popupEvent--left,
-.popupEvent--right,
-.popupEvent--left-top {
+.popup-event-center,
+.popup-event--right-top,
+.popup-event--left,
+.popup-event--right,
+.popup-event--left-top {
     position: absolute;
     width: 230px;
     height: 280px;
@@ -142,23 +149,28 @@
     border: 1px solid lightgray;
     box-shadow: 2px 2px 10px dimgray;
 }
-.popupEvent--left {
+.popup-event-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.popup-event--left {
     top: 20px;
     left: 105%;
 }
-.popupEvent--left-top {
+.popup-event--left-top {
     bottom: 50%;
     left: 105%;
  }
-.popupEvent--right {
+.popup-event--right {
     top: 20px;
     right: 105%;
  }
-.popupEvent--right-top {
+.popup-event--right-top {
     bottom: 50%;
     right: 105%;
 }
-.popupInput {
+.popup-input {
     display: block;
     width: 100%;
     height: 25px;
@@ -170,13 +182,13 @@
     font-family: sans-serif;
     outline: none;
 }
-#popupDescription {
+#popup-description {
     margin-top: 25px;
     padding-top: 5px;
     height: 95px;
     white-space: normal;
 }
-.popupBtn {
+.popup-btn {
     padding: 1px 10px;
     color: dimgray;
     background-color: lightgray;
@@ -191,7 +203,7 @@
     box-shadow: 2px 2px dimgrey;
     outline: none;
 }
-.popupBtn:active {
+.popup-btn:active {
     background-color: lightgray;
     box-shadow: 1px 1px gray;
     transform: translate(1px, 1px);
@@ -206,20 +218,21 @@
     opacity: .35;
     z-index: 5;
 }
-.errorField {
+.error-field {
     outline: solid;
     outline-color: deeppink;
     outline-width: thin;
 }
-.correctField {
+.correct-field {
     outline: solid;
+    outline-color: limegreen;
     outline-color: limegreen;
     outline-width: thin;
 }
-.inputContainer {
+.input-container {
     position: relative;
 }
-.errorMessage {
+.error-message {
     border: 1px solid crimson;
     border-radius: 10px;
     padding: 5px 2px;
@@ -228,26 +241,26 @@
     z-index: 15;
     text-align: center;
 }
-.eventBody {
+.event-body {
     margin: 4px 0;
     background-color: lightblue;
     padding: 5px;
     border-radius: 10px;
 }
-.eventPeople {
+.event-people {
     font-family: serif;
     font-size: 11px;
     color: black;
     padding: 5px 0;
 }
-.eventTitle {
+.event-title {
     font-family: cursive;
     font-style: normal;
     font-size: 14px;
     color: gray;
     text-decoration: underline;
 }
-.searchContainer {
+.search-container {
     position: relative;
     float: right;
 }
@@ -266,17 +279,17 @@
 .hide {
     display: none;
 }
-.eventDisplayed {
+.event-displayed {
     margin: 5px 0;
 }
-.eventDisplayedTitle {
+.event-displayed-title {
     font-family: cursive;
     font-style: normal;
     font-size: 14px;
     color: gray;
     text-decoration: underline;
 }
-.eventDisplayedDate {
+.event-displayed-date {
     font-family: serif;
     font-size: 11px;
     color: black;
