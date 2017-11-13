@@ -38,8 +38,8 @@ var jsValidator = {
   }, /* end event name */
   'eventDate': function () {
     // format dd-mm-yyyy only 19-- and 20--
-    var dateFormate = /^[0-3][0-9]-[0|1][0-9]-(19|20)[0-9]{2}/;
-    if (dateFormate.test(this.value)) {
+    var dateFormat = /^[0-3][0-9]-[0|1][0-9]-(19|20)[0-9]{2}/;
+    if (dateFormat.test(this.value)) {
       correctField(this, 'eventDate');
     } else {
       errorField(this, 'eventDate', 'Only dd-mm-yyyy format, please');
@@ -295,11 +295,11 @@ function Calendar() {
     table.appendChild(blur);
     if (objOfCreation == null && dateName == null) {
       setAttributes(popupEvent, {'class': 'popup-event-center'});
-    } else if (howCloseRightBorderIs > 400 && howCloseTopBorderIs > 300) {
+    } else if (howCloseRightBorderIs > 600 && howCloseTopBorderIs > 400) {
       setAttributes(popupEvent, {'class': 'popup-event--left'});
-    } else if (howCloseRightBorderIs > 400 && howCloseTopBorderIs < 300) {
+    } else if (howCloseRightBorderIs > 600 && howCloseTopBorderIs < 400) {
       setAttributes(popupEvent, {'class': 'popup-event--left-top'});
-    } else if (howCloseRightBorderIs < 400 && howCloseTopBorderIs > 300) {
+    } else if (howCloseRightBorderIs < 600 && howCloseTopBorderIs > 400) {
       setAttributes(popupEvent, {'class': 'popup-event--right'});
     } else {
       setAttributes(popupEvent, {'class': 'popup-event--right-top'});
